@@ -5,3 +5,5 @@ const homeRouter = express.Router();
 
 
 homeRouter.route('/home').get(home)
+
+export default homeRouter;

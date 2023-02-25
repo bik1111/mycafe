@@ -1,3 +1,4 @@
+
 import request from 'request';
 import * as cheerio from 'cheerio';
 import express, { json } from 'express';
@@ -5,6 +6,9 @@ import puppeteer from 'puppeteer';
 import { insertCafeInfo } from '../service/cafeService.js'
 const app = express();
 import pool from '../config/database.js';
+import { pagination  } from '../assets/paging.js';
+
+
 
 export const starBucks = async (req,res ) => {
     try {
@@ -19,7 +23,6 @@ export const starBucks = async (req,res ) => {
     await page.waitForSelector('#container > div > form > fieldset > div > section > article.find_store_cont > article > article:nth-child(4) > div.loca_step1 > div.loca_step1_cont > ul > li:nth-child(1) > a');
     await page.click('#container > div > form > fieldset > div > section > article.find_store_cont > article > article:nth-child(4) > div.loca_step1 > div.loca_step1_cont > ul > li:nth-child(1) > a');
 
-    await new Promise(resolve => setTimeout(resolve, 1000)); // waits for 1 second
 
 
     // 전체 버튼 클릭
@@ -70,23 +73,45 @@ export const starBucks = async (req,res ) => {
 };
 
 
+    // @param {전체 게시물} rows
+    // @param {현재 페이지} currPage
+    // @param {화면에 보여질 게시물 개수} displayRowCnt
+    // @param {화면에 보여질 페이지 개수} displayPageCnt
+    // @returns {시작페이지, 마지막페이지, 전체페이지, 현재 페이지, 보여질 게시물}
 
-export const getCafe = async(req,res) => {
+
+export const getCafe = async(req,res,next) => {
+
     try {
 
+        const page = req.params.page;
 
-        const conn = await pool.getConnection(async conn => conn);
+        const conn = await pool.getConnection();
+        const sql = `select id, name, address, number from CafeInfo;`;
+        const [myresult] = await conn.query(sql);
+        
+        const data = await pagination(myresult, page, 10, 10);
+
+        data.title = "Cafe Info";
+
         const getLatLngSql = `SELECT lat, lng, name, address FROM CafeInfo`;
 
         const [result] = await conn.query(getLatLngSql);
         
- 
+        
+        return res.render('cafes/cafe', { result, 
+            data, 
+            startPage : data.startPage,
+            endPage: data.endPage,
+            currPage : data.currPage,
+            totalPage : data.totalPage,
+            myresult : data.myresult })
 
-
-        return res.render('cafe', { result })
-
+      
 
       } catch (error) {
         console.error(error);
+
       }
-}
+    }; 
+

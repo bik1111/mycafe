@@ -9,7 +9,8 @@ import { starBucks, getCafe } from '../controller/cafeController.js';
 const cafeRouter = express.Router();
 
 cafeRouter.route('/starbucks').get(starBucks)
-cafeRouter.route('/cafe').get(getCafe)
+cafeRouter.route('/info/:page').get(getCafe)
+
 
 
 export default cafeRouter;

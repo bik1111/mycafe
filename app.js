@@ -2,6 +2,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 import express from "express";
 import cafeRouter  from "./src/router/cafe.js";
+import homeRouter from "./src/router/home.js";
 import morgan from 'morgan';
 import path from 'path'
 import ejsMate from "ejs-mate";
@@ -12,10 +13,14 @@ const app = express();
 const logger = morgan("dev");
 
 
-app.use('/', cafeRouter);
+app.use('/cafe', cafeRouter);
+app.use('/', homeRouter);
 app.engine('ejs', ejsMate)
 app.set('view engine', 'ejs');
-app.set('views', process.cwd() + '/src/views');
+const __dirname = path.dirname(new URL(import.meta.url).pathname);
+app.set('views', path.join(__dirname, 'src/views'))
+app.use(express.static(__dirname + '/public'));
+
 
 app.use(logger);
 
