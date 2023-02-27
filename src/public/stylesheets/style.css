@@ -2,6 +2,17 @@ div.cafe-info-list {
   margin: 0 auto; /* 테이블을 가운데 정렬 */
   width: 80%; /* 테이블의 폭 지정 */
   border-collapse: collapse; /* 셀 간 경계선 없앰 */
+  text-align: center; /* 가로 정렬 */
+  width: 80%; /* 너비 지정 */
+}
+
+table {
+  margin: 0 auto; /* 테이블을 가운데 정렬 */
+  border-collapse: collapse;
+}
+
+h1 {
+  text-align: center; /* 가운데 정렬 추가 */
 }
 
 table th,
@@ -13,4 +24,9 @@ table td {
 
 table th {
   background-color: lightgray; /* 헤더 셀 배경색 지정 */
+}
+
+#map {
+  margin: 0 auto; /* 가로 가운데 정렬 */
+  padding-bottom: 100px;
 }

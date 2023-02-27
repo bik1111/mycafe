@@ -92,7 +92,7 @@ export const getCafe = async(req,res,next) => {
         
         const data = await pagination(myresult, page, 10, 10);
 
-        data.title = "Cafe Info";
+        data.title = "Cafe Information";
 
         const getLatLngSql = `SELECT lat, lng, name, address FROM CafeInfo`;
 

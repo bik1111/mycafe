@@ -19,7 +19,7 @@ app.engine('ejs', ejsMate)
 app.set('view engine', 'ejs');
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 app.set('views', path.join(__dirname, 'src/views'))
-app.use(express.static(__dirname + '/public'));
+app.use(express.static(__dirname + '/src/public'));
 
 
 app.use(logger);
