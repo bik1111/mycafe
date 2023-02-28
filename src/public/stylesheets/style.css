@@ -11,7 +11,8 @@ table {
   border-collapse: collapse;
 }
 
-h1 {
+h1,
+h3 {
   text-align: center; /* 가운데 정렬 추가 */
 }
 

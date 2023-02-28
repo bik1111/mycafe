@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Search Cafe</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css"
+      integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I"
+      crossorigin="anonymous"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/bs-custom-file-input/dist/bs-custom-file-input.js"></script>
+  </head>
+  <body>
+    <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">Cafes</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNavAltMarkup"
+          aria-controls="navbarNavAltMarkup"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+          <div class="navbar-nav">
+            <a class="nav-link" href="/home">Home</a>
+            <a class="nav-link" href="/cafe/info/1">Cafes</a>
+            <a class="nav-link" href="/campgrounds/new">New Cafe</a>
+          </div>
+          <div class="navbar-nav ml-auto">
+            <a class="nav-link" href="/login">Login</a>
+            <a class="nav-link" href="/register">Register</a>
+            <a class="nav-link" href="/logout">Logout</a>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <br />
+    <div class="row">
+      <h1 class="text-center">Search for Cafe</h1>
+      <!-- 열의 절반을 차지하되 왼쪽으로 쏠리지 않고 가운데로 오게끔 3만큼 ㅇffset 시키는것.-->
+      <div class="col-md-6 offset-md-3">
+        <!-- 해당 제출 폼의 클래스와 JS에서 불러오는 클래스명이 동일해야함.-->
+        <!-- 또한 폼의 모든 인풋들이 'required'로 맞쳐줘야 필수로 입력하라는 문구 나옴.-->
+        <form
+          action="/cafe/search"
+          method="GET"
+          class="validated-form"
+          enctype="multipart/form-data"
+        >
+          <!-- mb-3 : css 파일을 따로 만드는것보다 부트스트랩 클래스를 이용하는것이 더 효율적-->
+          <div class="mb-3">
+            <label class="form-label" for="title"><strong>Title</strong></label>
+            <!-- campground[title]처럼 중괄호사이에 이름이나 위치등을 넣으면 데이터가 POST 요쳥을 해서 
+                Express 앱을 지나 서버로 갈 때 <body>에 포함된게 campground라고 정렬됨.
+                    콘텐츠를 그룹화 할 수 있는 좋은 방법.-->
+            <input
+              class="form-control"
+              type="text"
+              id="keyword"
+              name="keyword"
+              placeholder="Search by title or address"
+              required
+            />
+          </div>
+          <br />
+          <div class="div mb-3">
+            <button class="btn btn-primary">Search</button>
+          </div>
+        </form>
+        <% for (let i = 0; i < cafeResult.length; i++) { %>
+        <ul>
+          <li><strong>Name</strong> <%= cafeResult[i].name %></li>
+          <li><strong>Address</strong> <%= cafeResult[i].address %></li>
+          <li><strong>Number</strong> <%= cafeResult[i].number %></li>
+        </ul>
+        <% } %>
+        <tr>
+          <br />
+          <a href="/cafe/info/1">All Cafes</a>
+        </tr>
+      </div>
+    </div>
+  </body>
+</html>

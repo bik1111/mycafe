@@ -8,3 +8,13 @@ export const insertCafeInfoDao = async(connection, insertCafeInfoParams) => {
 
     return insertCafeInfoRow;
 }
+
+
+export const findCafeInfo = async(connection, keyword) => {
+    const getCafeInfoQuery = `SELECT name, address, number FROM CafeInfo WHERE CONCAT(name, address, number) LIKE '%${keyword}%';`;
+    const [getCafeInfoRow] = await connection.query(
+        getCafeInfoQuery, [keyword]
+    );
+
+    return getCafeInfoRow;
+}

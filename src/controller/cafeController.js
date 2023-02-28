@@ -3,7 +3,7 @@ import request from 'request';
 import * as cheerio from 'cheerio';
 import express, { json } from 'express';
 import puppeteer from 'puppeteer';
-import { insertCafeInfo } from '../service/cafeService.js'
+import { insertCafeInfo, findCafe } from '../service/cafeService.js'
 const app = express();
 import pool from '../config/database.js';
 import { pagination  } from '../assets/paging.js';
@@ -113,5 +113,15 @@ export const getCafe = async(req,res,next) => {
         console.error(error);
 
       }
-    }; 
+    };
+
+
+export const findCoffeeShop = async(req,res) => {
+    const { keyword } = req.query;
+    const cafeResult = await findCafe(keyword);
+    console.log(cafeResult);
+
+    return res.render('cafes/search', { cafeResult })
+
+}
 
