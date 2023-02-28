@@ -18,3 +18,12 @@ export const findCafeInfo = async(connection, keyword) => {
 
     return getCafeInfoRow;
 }
+
+export const findUserInfo = async(connection, username) => {
+    const getUserInfoQuery = `SELECT username FROM UserInfo WHERE =?;`;
+    const [getUserInfoRow] = await connection.query(
+        getUserInfoQuery, [username]
+    );
+
+    return getUserInfoRow;
+}

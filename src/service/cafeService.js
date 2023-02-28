@@ -1,5 +1,5 @@
 import pool from '../config/database.js';
-import { insertCafeInfoDao, findCafeInfo} from '../dao/cafeDao.js';
+import { insertCafeInfoDao, findCafeInfo, findUserInfo} from '../dao/cafeDao.js';
 
 
 
@@ -28,5 +28,15 @@ export const findCafe = async(keyword) => {
     connection.release();
 
     return searchCafeRes;
+
+}
+
+
+export const findUser = async(username) => {
+    const connection = await pool.getConnection(async (conn) => conn);
+    const searchUser = await findUserInfo(connection, username);
+    connection.release();
+
+    return searchUser ;
 
 }
