@@ -14,23 +14,26 @@
     <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
       <header class="mb-auto">
         <div>
-          <h3 class="float-md-left mb-0">MyCafe</h3>
+          <h3 class="float-md-left mb-0">My Cafe</h3>
           <br />
           <nav class="nav nav-masthead justify-content-center float-md-right">
             <a class="nav-link active" aria-current="page" href="#">Home</a>
             <a class="nav-link" href="/cafe/info/1">Cafes</a>
+            <% if(!currentUser) { %>
             <a class="nav-link" href="/login">Login</a>
             <a class="nav-link" href="/register">Register</a>
+            <% } %> <% if(currentUser) { %>
             <a class="nav-link" href="/logout">Logout</a>
+            <% } %>
           </nav>
         </div>
       </header>
       <main class="px-3">
         <br />
         <br />
-        <h1>MyCafe</h1>
+        <h1>My Cafe</h1>
         <br />
-        <p class="lead">Welcome to MyCafe !</p>
+        <p class="lead">Welcome to My Cafe !</p>
         <br />
         <a
           href="/cafe/info/1"

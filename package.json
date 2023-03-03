@@ -12,14 +12,20 @@
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.1.0",
+    "body-parser": "^1.20.2",
     "cheerio": "^1.0.0-rc.12",
+    "connect-flash": "^0.1.1",
+    "cookie-parser": "^1.4.6",
     "dotenv": "^16.0.3",
     "ejs": "^3.1.8",
     "ejs-mate": "^4.0.0",
     "express": "^4.18.2",
+    "express-mysql-session": "^2.1.8",
+    "express-session": "^1.17.3",
     "install": "^0.13.0",
     "jsonwebtoken": "^9.0.0",
     "logger": "^0.0.1",
+    "mysql": "^2.18.1",
     "mysql2": "^3.1.2",
     "nodemon": "^2.0.20",
     "path": "^0.12.7",
@@ -27,6 +33,7 @@
     "puppeteer": "^19.7.1",
     "redis": "^4.6.5",
     "request": "^2.88.2",
+    "session-file-store": "^1.5.0",
     "util": "^0.12.5"
   },
   "devDependencies": {

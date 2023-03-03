@@ -1,11 +1,34 @@
 import redis from 'redis';
-const redisClient = redis.createClient(process.env.REDIS_PORT)
+
+
+const redisClient = redis.createClient();
+
+(async () => {
+  redisClient.connect();
+})();
+
+redisClient.on('error', (err) => {
+  console.log(`Redis error: ${err}`);
+  redisClient.quit();
+});
+
+
+
+redisClient.on('connect', () => {
+  console.log('✅ Redis client connected');
+});
+
+
+
+
+
+
 
 const set = (key, value) => {
     redisClient.set(key, JSON.stringify(value));
   };
   
-  const get = (req, res, next) => {
+const get = (req, res, next) => {
     let key = req.originalUrl;
   
     redisClient.get(key, (error, data) => {
@@ -25,5 +48,9 @@ const set = (key, value) => {
     });
   };
 
-  export default { redisClient, set, get };
- 
+  export default {
+    redisClient: redisClient,
+    set: set,
+    get: get
+  };
+  

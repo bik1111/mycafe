@@ -1,3 +1,5 @@
+import { connect } from "puppeteer";
+
 export const insertCafeInfoDao = async(connection, insertCafeInfoParams) => {
 
     const insertCafeInfoQuery = `INSERT INTO CafeInfo (name, lat, lng, address, number) VALUES (?,?,?,?,?);`;
@@ -20,10 +22,20 @@ export const findCafeInfo = async(connection, keyword) => {
 }
 
 export const findUserInfo = async(connection, username) => {
-    const getUserInfoQuery = `SELECT username FROM UserInfo WHERE =?;`;
+    const getUserInfoQuery = `SELECT username, password FROM UserInfo WHERE username=?;`;
     const [getUserInfoRow] = await connection.query(
         getUserInfoQuery, [username]
     );
 
     return getUserInfoRow;
+}
+
+export const createNewUser = async(connection, insertUserInfoParams) => {
+    const insertNewUserQuery = `INSERT INTO UserInfo (username, email, password) VALUES (?,?,?);`;
+    const [insertUserInfoRow] = await connection.query(
+        insertNewUserQuery,
+        insertUserInfoParams
+    );
+
+    return insertUserInfoRow;
 }
