@@ -1,5 +1,3 @@
-const app = express();
-
 import dotenv from 'dotenv';
 dotenv.config();
 import express from "express";
@@ -13,9 +11,10 @@ import session from 'express-session';
 import cookieParser from 'cookie-parser';
 import localsMiddleware from './middleware.js';
 import MySQLStore from 'express-mysql-session';
-
 const MySQLStoreSession = MySQLStore(session);
 
+
+const app = express();
 
 
 var options ={      
@@ -47,20 +46,20 @@ app.use(session ({
 
 app.use(localsMiddleware);
 
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.engine('ejs', ejsMate)
+app.set('view engine', 'ejs');
+const __dirname = path.dirname(new URL(import.meta.url).pathname);
+
+app.set('views', path.join(__dirname, 'src/views'))
+app.use(express.static(__dirname + '/src/public'));
 
 
 const logger = morgan("dev");
 
 app.use('/cafe', cafeRouter);
 app.use('/', homeRouter);
-
-app.engine('ejs', ejsMate)
-app.set('view engine', 'ejs');
-const __dirname = path.dirname(new URL(import.meta.url).pathname);
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-app.set('views', path.join(__dirname, 'src/views'))
-app.use(express.static(__dirname + '/src/public'));
 
 
 

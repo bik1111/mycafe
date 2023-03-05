@@ -3,7 +3,8 @@ import redisClient  from "../utils/cache.js"
 import { promisify } from "util";
 
 
-export default  {
+export default {
+
   sign: (user) => {
     const payload = {
       id: user.id,
@@ -11,14 +12,17 @@ export default  {
     };
 
     return jwt.sign(payload, process.env.JWT_SECRET, {
+    
       algorithm: 'HS256',
       expiresIn: '1h',
       issuer: 'jincheol',
+      
     });
-  },
-  verify: (token) => {
+  },  
+  verify: (token) => { 
     let decoded = null;
     try {
+
       decoded = jwt.verify(token, process.env.JWT_SECRET);
       return {
         ok: true,

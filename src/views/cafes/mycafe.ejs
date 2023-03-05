@@ -1,10 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login</title>
+    <meta charset="utf-8" />
+    <title>My favorite Cafe</title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
     <link
       rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css"
@@ -33,6 +32,7 @@
             <a class="nav-link" href="/home">Home</a>
             <a class="nav-link" href="/cafe/info/1">Cafes</a>
             <a class="nav-link" href="/campgrounds/new">New Cafe</a>
+            <a class="nav-link" href="/cafe/search">Search</a>
           </div>
           <div class="navbar-nav ml-auto">
             <% if(!currentUser) { %>
@@ -45,50 +45,20 @@
         </div>
       </div>
     </nav>
-
-    <div
-      class="container d-flex justify-content-center align-items-center mt-5"
-    >
+    <% for (let cafe of myFavCafes) { %>
+    <div class="card mb-3">
       <div class="row">
-        <div class="col-md-6 offset-md-3 col-xl-4 offset-xl-4">
-          <div class="card shadow">
-            <img src="/img/01.jpeg" alt="" class="card-img-top" />
-            <div class="card-body">
-              <h5 class="card-title">Login</h5>
-              <form
-                action="/login"
-                method="POST"
-                class="validated-form"
-                novalidate
-              >
-                <div class="mb-3">
-                  <label class="form-label" for="username">Username</label>
-                  <input
-                    class="form-control"
-                    type="text"
-                    id="username"
-                    name="username"
-                    autofocus
-                    required
-                  />
-                </div>
-
-                <div class="mb-3">
-                  <label class="form-label" for="password">Password</label>
-                  <input
-                    class="form-control"
-                    type="password"
-                    id="password"
-                    name="password"
-                    required
-                  />
-                </div>
-                <button class="btn btn-success btn-block">Login</button>
-              </form>
-            </div>
+        <div class="col-md-8">
+          <div class="card-body">
+            <h5 class="card-title"><%= cafe.name %></h5>
+            <p class="card-text"><%= cafe.address %></p>
+            <p class="card-text">
+              <small class="text-muted"><%= cafe.number %></small>
+            </p>
           </div>
         </div>
       </div>
     </div>
+    <% } %>
   </body>
 </html>

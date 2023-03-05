@@ -21,6 +21,7 @@ export const login =  async (req,res) => {
     
     //해당 하는 Id를 가진 유저 존재유무 조회.
     const user = await findUser(username);
+    
 
 
     if(user.length > 0) {
@@ -29,12 +30,26 @@ export const login =  async (req,res) => {
 
         if (pwCheck) {
             //jwt 토큰 발급.
-            const accessToken = jwt.sign(user);
+            const accessToken = jwt.sign(user[0]);
+
+            
+
             const refreshToken = jwt.refresh();
             redisClient.set(username, refreshToken);
+
+
+
+
+            res.cookie('jwt', accessToken, {
+                httpOnly: true,
+                
+            })
+
+
+
             req.session.loggedIn = true;
             req.session.user = user;
-
+                    
             return res.redirect('home')
 
         } else {

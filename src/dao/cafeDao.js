@@ -1,4 +1,3 @@
-import { connect } from "puppeteer";
 
 export const insertCafeInfoDao = async(connection, insertCafeInfoParams) => {
 
@@ -22,7 +21,7 @@ export const findCafeInfo = async(connection, keyword) => {
 }
 
 export const findUserInfo = async(connection, username) => {
-    const getUserInfoQuery = `SELECT username, password FROM UserInfo WHERE username=?;`;
+    const getUserInfoQuery = `SELECT id, password, username FROM UserInfo WHERE username=?;`;
     const [getUserInfoRow] = await connection.query(
         getUserInfoQuery, [username]
     );
@@ -38,4 +37,47 @@ export const createNewUser = async(connection, insertUserInfoParams) => {
     );
 
     return insertUserInfoRow;
+}
+
+
+export const findAddedCafe = async(connection, name) => {
+    const selectAddedCafe = `SELECT id,name,address,number FROM CafeInfo WHERE name=?;`;
+    
+    const [getCafeInfoRow] = await connection.query(
+        selectAddedCafe, [name]);
+    return getCafeInfoRow;
+
+}
+
+export const insertMyFavCafe = async(connection, cafeId,userId) => {
+    const insertFavCafeInfoQuery = `INSERT INTO favCafeInfo (cafe_id, user_id) VALUES(?,?);`;
+    const [insertFavCafeInfoRow] = await connection.query(
+        insertFavCafeInfoQuery,
+        [cafeId,userId]
+    );
+    
+    return insertFavCafeInfoRow;
+
+}
+
+
+export const selectMyFavCafeId = async(connection, id) => {
+    const selectFavCafeInfoQuery = `SELECT name, address, number FROM CafeInfo WHERE id=?;`;
+    const [getFavCafeInfoRow] = await connection.query(
+        selectFavCafeInfoQuery, [id]);
+
+    return getFavCafeInfoRow;
+}
+
+export const selectUserFavCafe = async(connection, userId) => {
+    const selectFavUserCafeInfoQuery =`
+    SELECT CafeInfo.name, CafeInfo.address, CafeInfo.number
+    FROM favCafeInfo 
+    JOIN UserInfo ON favCafeInfo.user_id = UserInfo.id 
+    JOIN CafeInfo ON favCafeInfo.cafe_id = CafeInfo.id 
+    WHERE UserInfo.id=?;`;
+
+    const [getFavUserCafeInfoRow] = await connection.query(selectFavUserCafeInfoQuery, [userId]);
+
+    return getFavUserCafeInfoRow;
 }
