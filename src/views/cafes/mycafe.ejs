@@ -57,8 +57,20 @@
             </p>
           </div>
         </div>
+        <form
+          action="/cafe/myFavCafe/<%=userId%>/<%=cafe.id%>?_method=DELETE"
+          method="POST"
+        >
+          <% if (String(userId) === String(currentUser.id)) { %>
+          <button class="btn btn-sm btn-danger">Delete</button>
+          <% } %>
+        </form>
       </div>
     </div>
     <% } %>
   </body>
+  <script>
+    const cafe = <%-JSON.stringify(myFavCafes) %>
+    const userId = <%-JSON.stringify(userId) %>
+  </script>
 </html>

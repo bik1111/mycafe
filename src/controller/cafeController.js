@@ -5,7 +5,7 @@ import request from 'request';
 import * as cheerio from 'cheerio';
 import express from 'express';
 import puppeteer from 'puppeteer';
-import { insertCafeInfo, findCafe , addedCafe, insertFavCafe, findFavCafes } from '../service/cafeService.js'
+import { insertCafeInfo, findCafe , addedCafe, insertFavCafe, findFavCafes, deletedCafe} from '../service/cafeService.js'
 const app = express();
 import pool from '../config/database.js';
 import { pagination  } from '../assets/paging.js';
@@ -168,8 +168,6 @@ export const addMyCafe = async (req, res) => {
 
     const favCafe = await insertFavCafe(cafeId,userId);
 
-    console.log(cafeInfo);
-
     return res.json({ cafeInfo })
     
 
@@ -188,17 +186,29 @@ export const addMyCafePage = async (req, res) => {
         .split('=')[1];
 
     const decoded = jwt.verify(jwtToken, process.env.JWT_SECRET);
+    
     let userId;
     userId = decoded.id;
     userId =req.params.userId;
 
     const myFavCafes = await findFavCafes(userId);
 
-    return res.render('cafes/mycafe', { myFavCafes })
+
+    return res.render('cafes/mycafe', { myFavCafes, userId })
 
 };
-  
 
+export const deleteMyFavCafe = async(req,res) => { 
+    
+    const { userId, cafeId } = req.params;
+    
+    //최애 카페 목록에서 특정 카페 삭제하기.
+    await deletedCafe(userId, cafeId);
+
+    res.redirect(`/cafe/myFavCafe/${userId}`);
+
+  
+}
   
   
   

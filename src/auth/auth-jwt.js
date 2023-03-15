@@ -1,3 +1,5 @@
+import dotenv from 'dotenv';
+dotenv.config();
 import jwt from "jsonwebtoken";
 import redisClient  from "../utils/cache.js"
 import { promisify } from "util";

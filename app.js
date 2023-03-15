@@ -8,6 +8,7 @@ import path from 'path';
 import bodyParser from 'body-parser';
 import ejsMate from "ejs-mate";
 import session from 'express-session';
+import methodOverride from 'method-override';
 import cookieParser from 'cookie-parser';
 import localsMiddleware from './middleware.js';
 import MySQLStore from 'express-mysql-session';
@@ -25,6 +26,7 @@ var options ={
   database: process.env.DB_NAME
 };
  
+
 
 var sessionStore = new MySQLStoreSession(options);
 app.use(cookieParser());
@@ -48,6 +50,7 @@ app.use(localsMiddleware);
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(methodOverride('_method'));
 app.engine('ejs', ejsMate)
 app.set('view engine', 'ejs');
 const __dirname = path.dirname(new URL(import.meta.url).pathname);

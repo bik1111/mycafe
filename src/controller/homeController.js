@@ -37,19 +37,18 @@ export const login =  async (req,res) => {
             const refreshToken = jwt.refresh();
             redisClient.set(username, refreshToken);
 
+            
 
-
-
+            //클라이언트에게 쿠키단에 JWT 심어주기.
             res.cookie('jwt', accessToken, {
                 httpOnly: true,
                 
             })
+            
 
+            
 
-
-            req.session.loggedIn = true;
-            req.session.user = user;
-                    
+    
             return res.redirect('home')
 
         } else {
@@ -67,6 +66,8 @@ export const login =  async (req,res) => {
     }
 } catch (err) {
     console.log(err);
+    res.status(500).json({ message: 'Internal server error' });
+
 }
 };
 
@@ -97,11 +98,15 @@ export const register = async (req,res) => {
 
 
 export const logout = async(req,res) => {
-    try{
-    req.session.destroy();
-    res.redirect('home');
-    } catch(err) {
-        console.log(err);
-    }
 
+    //로그아웃은 간단하게 클라이언트 쿠키를 삭제하여 처리.
+    // token 값을 null로 전달하는 것과 함께, cookie의 만료시간을 0으로 설정
+    try {
+    res.cookie('jwt', null, {
+        maxAge : 0,
+    });
+    res.redirect('home');
+} catch(err) {
+    console.log(err);
+}
 }

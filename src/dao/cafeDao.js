@@ -71,7 +71,7 @@ export const selectMyFavCafeId = async(connection, id) => {
 
 export const selectUserFavCafe = async(connection, userId) => {
     const selectFavUserCafeInfoQuery =`
-    SELECT CafeInfo.name, CafeInfo.address, CafeInfo.number
+    SELECT CafeInfo.id, CafeInfo.name, CafeInfo.address, CafeInfo.number
     FROM favCafeInfo 
     JOIN UserInfo ON favCafeInfo.user_id = UserInfo.id 
     JOIN CafeInfo ON favCafeInfo.cafe_id = CafeInfo.id 
@@ -80,4 +80,12 @@ export const selectUserFavCafe = async(connection, userId) => {
     const [getFavUserCafeInfoRow] = await connection.query(selectFavUserCafeInfoQuery, [userId]);
 
     return getFavUserCafeInfoRow;
+}
+
+export const deleteMyFavCafeInList = async(connection, [user_id,cafe_id]) => {
+    const deleteFavCafeInfoQuery = `DELETE FROM favCafeInfo WHERE user_id=? AND cafe_id=?;`;
+
+    const [deleteFavCafeInfoRow] = await connection.query(deleteFavCafeInfoQuery, [user_id, cafe_id]);
+
+    return deleteFavCafeInfoRow;
 }

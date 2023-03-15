@@ -1,6 +1,6 @@
 import pool from '../config/database.js';
 import { insertCafeInfoDao, findCafeInfo, findUserInfo, createNewUser, 
-    findAddedCafe, insertMyFavCafe, selectMyFavCafeId, selectUserFavCafe } from '../dao/cafeDao.js';
+    findAddedCafe, insertMyFavCafe, selectMyFavCafeId, selectUserFavCafe, deleteMyFavCafeInList } from '../dao/cafeDao.js';
 
 
 
@@ -87,4 +87,11 @@ export const findFavCafes = async(userId) => {
 
     return favCafes;
 
+}
+
+export const deletedCafe = async(user_id, cafe_id) => {
+    const connection = await pool.getConnection(async(conn) => conn);
+    const deletedCafe = await deleteMyFavCafeInList(connection, [user_id, cafe_id]);
+
+    return deletedCafe;
 }
