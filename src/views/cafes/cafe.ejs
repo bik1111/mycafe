@@ -31,7 +31,6 @@
           <div class="navbar-nav">
             <a class="nav-link" href="/home">Home</a>
             <a class="nav-link" href="/cafe/info/1">Cafes</a>
-            <a class="nav-link" href="/campgrounds/new">New Cafe</a>
             <a class="nav-link" href="/cafe/myFavCafe/<%=userId%>"
               >Favorite Cafes</a
             >
@@ -43,6 +42,8 @@
             <a class="nav-link" href="/login">Login</a>
             <a class="nav-link" href="/register">Register</a>
             <% } %> <% if(currentUser) { %>
+            <a class="nav-link" href="/edit/username">Edit Username </a>
+            <a class="nav-link" href="/edit/password">Edit Password </a>
             <a class="nav-link" href="/logout">Logout</a>
 
             <% } %>

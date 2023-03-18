@@ -89,3 +89,19 @@ export const deleteMyFavCafeInList = async(connection, [user_id,cafe_id]) => {
 
     return deleteFavCafeInfoRow;
 }
+
+export const updateUserNameInfo = async(connection, [newUsername, oldUsername]) => {
+    const updateUserInfoQuery = `UPDATE UserInfo SET username =? WHERE username=?;`;
+    const [updateUserInfoResult] = await connection.query(updateUserInfoQuery, [newUsername, oldUsername]);
+
+
+    return updateUserInfoResult;
+
+}
+
+export const updateUserPasswordInfo = async(connection, [hasedNewPassword, username]) => {
+    const updateUserPasswordInfoQuery = `UPDATE UserInfo SET password=? WHERE username=?;`;
+    const [udpateUserInfoResult] = await connection.query(updateUserPasswordInfoQuery, [hasedNewPassword, username]);
+
+    return udpateUserInfoResult;
+}

@@ -1,7 +1,7 @@
-import bcrypt from 'bcrypt';
+import bcrypt, { hash } from 'bcrypt';
 import jwt from '../auth/auth-jwt.js';
 import redisClient  from "../utils/cache.js"
-import { findUser, registerUser } from "../service/cafeService.js"
+import { findUser, registerUser, editUserNameResult, editUserPassword } from "../service/cafeService.js"
 
 export const home = (req,res) => {
     res.render('home')
@@ -109,4 +109,59 @@ export const logout = async(req,res) => {
 } catch(err) {
     console.log(err);
 }
+}
+
+
+export const editUserNamePage = (req,res) => {
+    res.render('users/editUsername')
+}
+
+export const editUserName = async (req,res) => {
+
+try {
+
+    const { oldUsername, newUsername } = req.body;
+    
+    const user = await findUser(oldUsername);
+    if(!user) {
+        res.send(" User does not exist. ")
+    }
+
+    const editeduser = await editUserNameResult(newUsername, oldUsername);
+    
+    return res.redirect('/logout')
+
+} catch(err) {
+    console.log(err);
+}
+
+}
+
+
+export const editPasswordPage = (req,res) => {
+    res.render('users/editPassword')
+}
+
+export const editPassword = async(req,res) => {
+    const { username, oldPassword, newPassword } = req.body;
+
+    const user = await findUser(username);
+
+    if(!user) {
+        res.send(" user does not exist. ")
+    }
+
+    const ok =  await bcrypt.compare(oldPassword, user[0].password);
+    
+    if(!ok) {
+        res.send( " The current password is incorrect ")
+    }
+
+    const hasedNewPassword = await bcrypt.hash(newPassword, 10);
+
+    const editPassword = await editUserPassword(hasedNewPassword, username);
+
+    return res.redirect('/logout')
+
+
 }

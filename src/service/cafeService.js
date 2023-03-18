@@ -1,6 +1,12 @@
 import pool from '../config/database.js';
 import { insertCafeInfoDao, findCafeInfo, findUserInfo, createNewUser, 
-    findAddedCafe, insertMyFavCafe, selectMyFavCafeId, selectUserFavCafe, deleteMyFavCafeInList } from '../dao/cafeDao.js';
+    findAddedCafe, 
+    insertMyFavCafe, 
+    selectMyFavCafeId, 
+    selectUserFavCafe, 
+    deleteMyFavCafeInList, 
+    updateUserNameInfo,
+    updateUserPasswordInfo } from '../dao/cafeDao.js';
 
 
 
@@ -76,6 +82,7 @@ export const insertFavCafe = async (cafeId,userId) => {
 export const getCafeById = async(id) => {
     const connection = await pool.getConnection(async (conn) => conn);
     const favCafeInfo = await selectMyFavCafeId(connection, id);
+    connection.release();
 
     return favCafeInfo;
 }
@@ -84,6 +91,7 @@ export const getCafeById = async(id) => {
 export const findFavCafes = async(userId) => {
     const connection = await pool.getConnection(async(conn) => conn);
     const favCafes = await selectUserFavCafe(connection, userId);
+    connection.release();
 
     return favCafes;
 
@@ -92,6 +100,25 @@ export const findFavCafes = async(userId) => {
 export const deletedCafe = async(user_id, cafe_id) => {
     const connection = await pool.getConnection(async(conn) => conn);
     const deletedCafe = await deleteMyFavCafeInList(connection, [user_id, cafe_id]);
+    connection.release();
 
     return deletedCafe;
+}
+
+
+export const editUserNameResult = async(newUsername, oldUsername) => {
+    const connection = await pool.getConnection(async(conn) => conn);
+    const editedUser = await updateUserNameInfo(connection, [newUsername, oldUsername]);
+    connection.release();
+
+    return editedUser;
+}
+
+
+export const editUserPassword = async(hasedNewPassword, username) => {
+    const connection = await pool.getConnection(async(conn) => conn);
+    const editedUser = await updateUserPasswordInfo(connection, [hasedNewPassword, username]);
+    connection.release();
+
+    return editedUser;
 }
