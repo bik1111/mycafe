@@ -1,7 +1,6 @@
 
 import dotenv from 'dotenv';
 dotenv.config();
-import request from 'request';
 import * as cheerio from 'cheerio';
 import express from 'express';
 import puppeteer from 'puppeteer';
@@ -209,7 +208,8 @@ export const deleteMyFavCafe = async(req,res) => {
 
   
 }
-  
+
+
   
   
   

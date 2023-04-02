@@ -3,6 +3,7 @@ dotenv.config();
 import express from "express";
 import cafeRouter  from "./src/router/cafe.js";
 import homeRouter from "./src/router/home.js";
+import reviewRouter from './src/router/review.js';
 import morgan from 'morgan';
 import path from 'path';
 import bodyParser from 'body-parser';
@@ -61,9 +62,10 @@ app.use(express.static(__dirname + '/src/public'));
 
 const logger = morgan("dev");
 
+
+app.use('/review', reviewRouter);
 app.use('/cafe', cafeRouter);
 app.use('/', homeRouter);
-
 
 
 
