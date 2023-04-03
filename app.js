@@ -9,6 +9,7 @@ import path from 'path';
 import bodyParser from 'body-parser';
 import ejsMate from "ejs-mate";
 import session from 'express-session';
+import flash from "connect-flash";
 import methodOverride from 'method-override';
 import cookieParser from 'cookie-parser';
 import localsMiddleware from './middleware.js';
@@ -17,6 +18,7 @@ const MySQLStoreSession = MySQLStore(session);
 
 
 const app = express();
+
 
 
 var options ={      
@@ -46,8 +48,10 @@ app.use(session ({
   }
 
 }))
-
+app.use(flash());
 app.use(localsMiddleware);
+
+
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
