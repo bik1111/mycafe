@@ -1,7 +1,7 @@
 
 import jwt from "jsonwebtoken";
 
-import { findCafeInfobyId, createNewReview, findUserReview } from '../service/reviewService.js';
+import { findCafeInfobyId, createNewReview, findUserReview , deleteCafeReview} from '../service/reviewService.js';
 
 export const getReivewPage = async (req,res) => {
     const jwtToken = req.headers.cookie
@@ -17,6 +17,7 @@ export const getReivewPage = async (req,res) => {
     cafeInfo = cafeInfo[0]
 
     let reviews = await findUserReview(cafeId);
+    
 
     res.render('review', { cafeInfo, cafeId, reviews, userId})
 }
@@ -47,3 +48,17 @@ try {
 }
 
 
+export const deleteReview = async(req,res) => {
+
+try {
+
+    const { cafeId, reviewId }  = req.params;
+    const deletedReivew = await deleteCafeReview(cafeId,reviewId);
+
+    res.redirect(`/review/${cafeId}`);
+
+} catch(err) {
+    console.log(err);
+}
+
+}

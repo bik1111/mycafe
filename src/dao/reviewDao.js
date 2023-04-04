@@ -14,8 +14,16 @@ export const createNewReviewResult = async(connection, [cafeId,userId,reviewRati
 }
 
 export const selectUserReivew = async(connection, [cafeId]) => {
-    const selectUserReviewQuery = `SELECT writer_id, rating, reviewContent FROM reviewInfo WHERE cafe_id=?;`;
+    const selectUserReviewQuery = `SELECT review_id, writer_id, rating, reviewContent FROM reviewInfo WHERE cafe_id=?;`;
     const [reviewInfoResult] = await connection.query(selectUserReviewQuery, [cafeId]);
 
     return reviewInfoResult;
+}
+
+export const deleteUserReview = async(connection, [cafeId,reviewId]) => {
+    const deleteUserReviewQuery = `DELETE FROM reviewInfo WHERE cafe_id =? AND review_id=?;`;
+    const [deleteReviewResult] = await connection.query(deleteUserReviewQuery, [cafeId, reviewId]);
+
+    return deleteReviewResult;
+
 }

@@ -49,13 +49,17 @@
       <div class="col-5">
         <div class="card mb-6">
           <div class="card-body">
-            <h5 class="card-title"><%= cafeInfo.name%></h5>
+            <h5 class="card-title"><%= cafeInfo.name%> 점</h5>
           </div>
           <ul class="list-group list-group-flush">
-            <li class="list-group-item text-muted"><%= cafeInfo.address%></li>
-            <li class="list-group-item"><%= cafeInfo.number%></li>
+            <li class="list-group-item text-muted">
+              Address: <%= cafeInfo.address%>
+            </li>
+            <li class="list-group-item">Contact: <%= cafeInfo.number%></li>
           </ul>
-          <div class="card-footer text-muted">2 days ago</div>
+          <div class="card-footer text-muted">
+            Leave Your Reivews for our Store !
+          </div>
         </div>
       </div>
       <div class="row justify-content-center">
@@ -69,18 +73,6 @@
             class="mb-1 validated-form"
             novalidate
           >
-            <div class="mb-2">
-              <label class="form-label" for="rating">Rating</label>
-              <input
-                class="form-range"
-                type="range"
-                min="1"
-                max="5"
-                name="review[rating]"
-                id="rating"
-              />
-            </div>
-
             <fieldset class="starability-basic">
               <input
                 type="radio"
@@ -131,6 +123,8 @@
               <div class="valid-feedback">Looks good!</div>
             </div>
             <button class="btn btn-success">Submit</button>
+            <br />
+            <br />
           </form>
           <% } %> <% for(review of reviews) { %>
           <div class="card mb-3">
@@ -142,7 +136,7 @@
               <p class="card-text"><%=review.reviewContent%></p>
               <% if(currentUser && currentUser.id === userId) { %>
               <form
-                action="/review/<%=review.id%>/reviews/<%=review._id%>?_method=DELETE"
+                action="/review/delete/<%=cafeId%>/<%=review.review_id%>?_method=DELETE"
                 method="POST"
               >
                 <button class="btn btn-sm btn-danger">Delete</button>
