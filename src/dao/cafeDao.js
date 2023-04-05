@@ -106,3 +106,4 @@ export const updateUserPasswordInfo = async(connection, [hasedNewPassword, usern
     return udpateUserInfoResult;
 }
 
+

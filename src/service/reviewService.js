@@ -1,4 +1,3 @@
-import { connect } from 'puppeteer';
 import pool from '../config/database.js';
 import { findCafeInfoResult, createNewReviewResult,selectUserReivew, deleteUserReview} from '../dao/reviewDao.js';
 

@@ -134,7 +134,7 @@
                 Rating: <%= review.rating%> stars
               </p>
               <p class="card-text"><%=review.reviewContent%></p>
-              <% if(currentUser && currentUser.id === userId) { %>
+              <% if(currentUser && currentUser.id === review.writer_id) { %>
               <form
                 action="/review/delete/<%=cafeId%>/<%=review.review_id%>?_method=DELETE"
                 method="POST"

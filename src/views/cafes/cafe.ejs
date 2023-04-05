@@ -109,6 +109,8 @@
       "
     ></script>
     <script>
+      const addedCafes = [];
+
       function addMyCafe(id) {
         const cafe = document.querySelector(`[data-id="${id}"]`);
         const name = cafe
@@ -121,6 +123,19 @@
         const number = cafe
           .closest("tr")
           .querySelector("td:nth-child(3)").textContent;
+
+        // 이미 추가된 카페인지 검사
+        if (
+          addedCafes.some(
+            (cafe) =>
+              cafe.name === name &&
+              cafe.address === address &&
+              cafe.number === number
+          )
+        ) {
+          alert("이미 추가된 카페입니다.");
+          return;
+        }
 
         if (confirm('"' + name + "점" + '" 을(를) 추가하시겠습니까?')) {
           fetch("/cafe/add", {
@@ -137,6 +152,7 @@
           }).then((res) => {
             if (res.ok) {
               alert("추가되었습니다.");
+              addedCafes.push({ name, address, number });
             } else {
               alert("추가되지 않았습니다.");
             }

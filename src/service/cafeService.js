@@ -6,7 +6,8 @@ import { insertCafeInfoDao, findCafeInfo, findUserInfo, createNewUser,
     selectUserFavCafe, 
     deleteMyFavCafeInList, 
     updateUserNameInfo,
-    updateUserPasswordInfo, } from '../dao/cafeDao.js';
+    updateUserPasswordInfo,
+     } from '../dao/cafeDao.js';
 
 
 

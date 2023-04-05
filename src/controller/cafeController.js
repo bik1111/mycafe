@@ -1,77 +1,77 @@
 
 import dotenv from 'dotenv';
 dotenv.config();
-import * as cheerio from 'cheerio';
+//import * as cheerio from 'cheerio';
 import express from 'express';
-import puppeteer from 'puppeteer';
-import { insertCafeInfo, findCafe , addedCafe, insertFavCafe, findFavCafes, deletedCafe} from '../service/cafeService.js'
+//import puppeteer from 'puppeteer';
+import { insertCafeInfo, findCafe , addedCafe, insertFavCafe, findFavCafes, deletedCafe } from '../service/cafeService.js'
 const app = express();
 import pool from '../config/database.js';
 import { pagination  } from '../assets/paging.js';
 import jwt from "jsonwebtoken";
 
 
-export const starBucks = async (req,res ) => {
-    try {
+//export const starBucks = async (req,res ) => {
+//    try {
 
-    const browser = await puppeteer.launch({ headless: false });
-    const page = await browser.newPage();
-    await page.setViewport({ width: 1280, height: 800 });
+//    const browser = await puppeteer.launch({ headless: false });
+//    const page = await browser.newPage();
+//    await page.setViewport({ width: 1280, height: 800 });
   
-    await page.goto('https://www.starbucks.co.kr/store/store_map.do?disp=locale');
+//    await page.goto('https://www.starbucks.co.kr/store/store_map.do?disp=locale');
   
     // 서울 버튼 클릭
-    await page.waitForSelector('#container > div > form > fieldset > div > section > article.find_store_cont > article > article:nth-child(4) > div.loca_step1 > div.loca_step1_cont > ul > li:nth-child(1) > a');
-    await page.click('#container > div > form > fieldset > div > section > article.find_store_cont > article > article:nth-child(4) > div.loca_step1 > div.loca_step1_cont > ul > li:nth-child(1) > a');
+//    await page.waitForSelector('#container > div > form > fieldset > div > section > article.find_store_cont > article > article:nth-child(4) > div.loca_step1 > div.loca_step1_cont > ul > li:nth-child(1) > a');
+//    await page.click('#container > div > form > fieldset > div > section > article.find_store_cont > article > article:nth-child(4) > div.loca_step1 > div.loca_step1_cont > ul > li:nth-child(1) > a');
 
 
 
     // 전체 버튼 클릭
-    await page.waitForSelector('#mCSB_2_container > ul > li:nth-child(1) > a');
-    await page.click('#mCSB_2_container > ul > li:nth-child(1) > a');
+//    await page.waitForSelector('#mCSB_2_container > ul > li:nth-child(1) > a');
+//    await page.click('#mCSB_2_container > ul > li:nth-child(1) > a');
 
-    await new Promise(resolve => setTimeout(resolve, 1000)); // waits for 1 second
+//    await new Promise(resolve => setTimeout(resolve, 1000)); // waits for 1 second
 
 
     // HTML 가져오기
-    const html = await page.content();
+ //   const html = await page.content();
 
 
     // Cheerio를 사용하여 매장 정보 추출
-    const $ = cheerio.load(html);
+//    const $ = cheerio.load(html);
 
 
-    const Info = $('#mCSB_3_container > ul > li').map((_, el) => {
-    const name = $(el).data('name');
-    const lat = $(el).data('lat');
-    const lng = $(el).data('long');
-    const address = $(el).find('.result_details').text().trim();
+//    const Info = $('#mCSB_3_container > ul > li').map((_, el) => {
+//   const name = $(el).data('name');
+//    const lat = $(el).data('lat');
+//    const lng = $(el).data('long');
+//    const address = $(el).find('.result_details').text().trim();
     //전화번호 찾기.
-    const number = address.match(/\d{4}-\d{4}/)[0];
+//    const number = address.match(/\d{4}-\d{4}/)[0];
 
-    return  { name, address, number, lat, lng };
-
-    }).get();
+//    return  { name, address, number, lat, lng };
+//
+//    }).get();
     
-    for (var i = 0 ; i < Info.length ; i++ ){
-        const myName = Info[i].name
-        const myLat = Info[i].lat
-        const myLng = Info[i].lng
-        const myAddress = Info[i].address
-        const myNumber = Info[i].number
+//    for (var i = 0 ; i < Info.length ; i++ ){
+//        const myName = Info[i].name
+//        const myLat = Info[i].lat
+//        const myLng = Info[i].lng
+//        const myAddress = Info[i].address
+//        const myNumber = Info[i].number
 
 
-        await insertCafeInfo(myName,myLat,myLng,myAddress,myNumber);
+//        await insertCafeInfo(myName,myLat,myLng,myAddress,myNumber);
 
-    }
+//    }
     
 
-    } catch(err) {
+//    } catch(err) {
 
-        console.log(err);
-    }
+//        console.log(err);
+//    }
 
-};
+//};
 
 
     // @param {전체 게시물} rows
@@ -167,10 +167,8 @@ export const addMyCafe = async (req, res) => {
 
     const favCafe = await insertFavCafe(cafeId,userId);
 
+
     return res.json({ cafeInfo })
-    
-
-
 
 };
 

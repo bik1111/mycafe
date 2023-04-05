@@ -1,4 +1,4 @@
-import bcrypt, { hash } from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import jwt from '../auth/auth-jwt.js';
 import redisClient  from "../utils/cache.js"
 import { findUser, registerUser, editUserNameResult, editUserPassword } from "../service/cafeService.js"
