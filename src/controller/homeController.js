@@ -2,6 +2,8 @@ import bcrypt from 'bcryptjs';
 import jwt from '../auth/auth-jwt.js';
 import redisClient  from "../utils/cache.js"
 import { findUser, registerUser, editUserNameResult, editUserPassword } from "../service/cafeService.js"
+import { smtpTransport } from "../config/email.js";
+import crypto from "crypto";
 
 export const home = (req,res) => {
     res.render('home')
@@ -165,3 +167,80 @@ export const editPassword = async(req,res) => {
 
 
 }
+
+
+
+var generateRandomNumber = function (min,max) {
+    var randNum = Math.floor(Math.random() * (max - min + 1)) + min;
+
+    return randNum;
+}
+
+
+export const emailAuth = (req,res) => {
+    const number = generateRandomNumber(111111, 999999)
+
+    const { email } = req.body; //사용자가 입력한 이메일
+
+    const mailOptions = {
+        from : "bik1111@naver.com ", // 발신자 이메일 주소.
+        to : email, //사용자가 입력한 이메일 -> 목적지 주소 이메일
+        subject : " 인증 관련 메일 입니다. ",
+        html : '<h1>인증번호를 입력해주세요 \n\n\n\n\n\n</h1>' + number
+    }
+    smtpTransport.sendMail(mailOptions, (err, response) => {
+        console.log(response);
+        //첫번째 인자는 위에서 설정한 mailOption을 넣어주고 두번째 인자로는 콜백함수.
+        if(err) {
+            res.json({ok : false , msg : ' 메일 전송에 실패하였습니다. '})
+            smtpTransport.close() //전송종료
+            return
+        } else {
+            res.json({ok: true, msg: ' 메일 전송에 성공하였습니다. ', authNum : number})
+            smtpTransport.close() //전송종료
+            return 
+
+        }
+    })
+}
+
+
+const generateEmailVerificationToken = () => {
+    const token = crypto.randomBytes(20).toString('hex');
+    const expires = new Date();
+    expires.setHours(expires.getHours() + 24); // 24시간 후 만료
+    return { token, expires };
+  };
+
+export const emailLinkauth = (req,res) => {
+
+    const result = generateEmailVerificationToken();
+
+    const { email } = req.body;
+    const mailOptions = {
+        from : "bik1111@naver.com ", // 발신자 이메일 주소.
+        to : email, //사용자가 입력한 이메일 -> 목적지 주소 이메일
+        subject : 'Verify your email address',
+        html: `<p>Please click the following link to verify your email address:</p>
+        <p> <a href="http://localhost:3000/verify-email/?email=${email}?token=${result.token}">Verify email</a></p>
+        <p>This link will expire on ${result.expires}.</p>`
+    }
+
+        smtpTransport.sendMail(mailOptions, (err, response) => {
+            console.log(response);
+            //첫번째 인자는 위에서 설정한 mailOption을 넣어주고 두번째 인자로는 콜백함수.
+            if(err) {
+                res.json({ok : false , msg : ' 메일 전송에 실패하였습니다. '})
+                smtpTransport.close() //전송종료
+                return
+            } else {
+                res.json({ok: true, msg: ' 메일 전송에 성공하였습니다. ', authNum : number})
+                smtpTransport.close() //전송종료
+                return 
+    
+            }
+        })
+    
+    
+    }
+
