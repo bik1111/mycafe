@@ -1,7 +1,7 @@
-import { verify } from "../auth/auth-jwt";
+import verify from "../auth/auth-jwt.js";
 
 
-const authJWT = (req, res, next) => {
+export const authJWT = (req, res, next) => {
     if (req.headers.authorization) {
       const token = req.headers.authorization.split('Bearer ')[1];
       const result = verify(token);
@@ -19,4 +19,3 @@ const authJWT = (req, res, next) => {
   };
 
   
-  export default authJWT

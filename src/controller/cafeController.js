@@ -4,11 +4,12 @@ dotenv.config();
 //import * as cheerio from 'cheerio';
 import express from 'express';
 //import puppeteer from 'puppeteer';
-import { insertCafeInfo, findCafe , addedCafe, insertFavCafe, findFavCafes, deletedCafe } from '../service/cafeService.js'
+import {  findCafe , addedCafe, insertFavCafe, findFavCafes, deletedCafe } from '../service/cafeService.js'
 const app = express();
-import pool from '../config/database.js';
+import pool from '../config/database.js'
 import { pagination  } from '../assets/paging.js';
 import jwt from "jsonwebtoken";
+import { redisClient, set, get } from "../utils/cache.js";
 
 
 //export const starBucks = async (req,res ) => {
@@ -107,18 +108,17 @@ export const getCafe = async(req,res,next) => {
         const getLatLngSql = `SELECT lat, lng, name, address FROM CafeInfo`;
 
         const [result] = await conn.query(getLatLngSql);
-        
-        
-        return res.render('cafes/cafe', { result, 
-            data, 
-            startPage : data.startPage,
-            endPage: data.endPage,
-            currPage : data.currPage,
-            totalPage : data.totalPage,
-            myresult : data.myresult, 
-            userId : userId})
-
-      
+        set(req.originalUrl, result);
+                
+            return res.render('cafes/cafe', { result,
+                data, 
+                startPage : data.startPage,
+                endPage: data.endPage,
+                currPage : data.currPage,
+                totalPage : data.totalPage,
+                myresult : data.myresult, 
+                userId : userId
+            });
 
       } catch (error) {
         console.error(error);

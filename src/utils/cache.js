@@ -1,13 +1,11 @@
-import redis from 'redis';
+import redis from "ioredis"
 import dotenv from 'dotenv';
 dotenv.config();
 
-const redisClient = redis.createClient({  host: 'localhost' , port: 6379 });
-
-
-//(async () => {
-//  redisClient.connect();
-//})();
+export const redisClient =  redis.createClient({
+  host: 'redis',
+  port: 6379,
+});
 
 redisClient.on('error', (err) => {
   console.log(`Redis error: ${err}`);
@@ -19,17 +17,14 @@ redisClient.on('connect', () => {
   console.log('✅ Redis client connected');
 });
 
-
-
-
-
-
-
-const set = (key, value) => {
+//redis에 데이터 저장.
+export const set = (key, value) => {
     redisClient.set(key, JSON.stringify(value));
   };
   
-const get = (req, res, next) => {
+
+// 데이터 가져오기.
+export const get = (req, res, next) => {
    let key = req.originalUrl;
   
     redisClient.get(key, (error, data) => {
@@ -48,9 +43,5 @@ const get = (req, res, next) => {
       } else next();
     });
   };
-  export default {
-    redisClient: redisClient,
-    set: set,
-    get: get
-  };
-  
+
+

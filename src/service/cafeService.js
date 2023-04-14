@@ -7,6 +7,9 @@ import { insertCafeInfoDao, findCafeInfo, findUserInfo, createNewUser,
     deleteMyFavCafeInList, 
     updateUserNameInfo,
     updateUserPasswordInfo,
+    insertTokenandEmail,
+    findVerifiedInfo,
+    updateUserStatusInfo
      } from '../dao/cafeDao.js';
 
 
@@ -40,9 +43,9 @@ export const findCafe = async(keyword) => {
 }
 
 
-export const findUser = async(username) => {
+export const findUser = async(email) => {
     const connection = await pool.getConnection(async (conn) => conn);
-    const searchUser = await findUserInfo(connection, username);
+    const searchUser = await findUserInfo(connection, email);
     connection.release();
 
     return searchUser ;
@@ -124,3 +127,28 @@ export const editUserPassword = async(hasedNewPassword, username) => {
     return editedUser;
 }
 
+export const saveTokenInUserInfo = async(token, email, password) => {
+    const connection = await pool.getConnection(async(conn) => conn);
+    const saveToken = await insertTokenandEmail(connection, [token, email, password]);
+    connection.release();
+
+
+    return saveToken;
+}
+
+export const verifyToken = async(token, email) => {
+    const connection = await pool.getConnection(async(conn) => conn);
+    const VerifiedTokenAndEmail = await findVerifiedInfo(connection, token, email);
+    connection.release();
+
+    return VerifiedTokenAndEmail;
+}
+
+
+export const updateStatus = async(token,email) => {
+    const connection = await pool.getConnection(async(conn) => conn);
+    const updateUserStatus = await updateUserStatusInfo(connection, token, email);
+    connection.release();
+
+    return updateUserStatus;
+}

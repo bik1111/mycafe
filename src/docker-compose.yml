@@ -1,0 +1,32 @@
+version: '3.8'
+services:
+  app:
+    build:
+      context: .
+      dockerfile : Dockerfile
+    ports:
+      - 3000:3000
+    volumes:
+      - .:/src
+    depends_on:
+      - mysql-server
+      - redis
+        
+  mysql-server:
+    image: mysql:8.0
+
+    restart : always
+
+    environment:
+      - MYSQL_DATABASE=mycafe
+      - MYSQL_ROOT_PASSWORD=kfkdog12
+    ports:
+      - '3306:3306'
+  redis:
+    image: redis:latest
+    command: ["redis-server", "--bind", "redis", "--port", "6379"]
+    container_name : redis
+    ports:
+      - "6379:6379"
+    restart : always
+

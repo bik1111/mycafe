@@ -1,3 +1,4 @@
+import { query } from "express";
 
 export const insertCafeInfoDao = async(connection, insertCafeInfoParams) => {
 
@@ -20,10 +21,10 @@ export const findCafeInfo = async(connection, keyword) => {
     return getCafeInfoRow;
 }
 
-export const findUserInfo = async(connection, username) => {
-    const getUserInfoQuery = `SELECT id, password, username FROM UserInfo WHERE username=?;`;
+export const findUserInfo = async(connection, email) => {
+    const getUserInfoQuery = `SELECT id, password, email, status FROM UserInfo WHERE email=?;`;
     const [getUserInfoRow] = await connection.query(
-        getUserInfoQuery, [username]
+        getUserInfoQuery, [email]
     );
 
     return getUserInfoRow;
@@ -107,3 +108,25 @@ export const updateUserPasswordInfo = async(connection, [hasedNewPassword, usern
 }
 
 
+export const insertTokenandEmail = async(connection, [token, email, password]) => {
+    const insertEmailTokenQuery = `INSERT INTO UserInfo (token, email, password, status) VALUES (?,?,?,0);`;
+    const [insertEmailToken] = await connection.query(insertEmailTokenQuery, [token, email, password]);
+
+    return insertEmailToken;
+}
+
+
+export const findVerifiedInfo = async(connection, token, email) => {
+    const findVerifiedTokenAndEmailQuery = `SELECT token, email FROM UserInfo WHERE token =? AND email =?;`;
+    const [findTokenAndEmail] = await connection.query(findVerifiedTokenAndEmailQuery, [token, email]);
+
+    return findTokenAndEmail;
+}
+
+
+export const updateUserStatusInfo = async(connection, token, email) => {
+    const updateUserStatusQuery = `UPDATE UserInfo SET status = 1 WHERE token = ? AND email=?;`;
+    const [updateUserStatus] = await connection.query(updateUserStatusQuery, [token,email]);
+
+    return updateUserStatus;
+}

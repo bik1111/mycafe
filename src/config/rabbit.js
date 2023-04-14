@@ -19,6 +19,7 @@ async function setup() {
 
     // create queues
     // 2 개의 queues 선언 : “processing.requests”는 요청을 저장하고 “processing.results”는 결과를 저장합니다.
+    // durable를 true로 설정하며 네트워크가 끊긴 상태에서 메시지가 보내지더라도 큐에 저장하고 있다가 연결되면 재전송 가능.
     await channel.assertQueue("processing.requests", { durable: true });
     await channel.assertQueue("processing.results", { durable: true });
 
@@ -30,6 +31,13 @@ async function setup() {
     // webService -> (요청) : processing.requests -> (요청 읽음) : processingService -> (결과 게시) : processing.results
     
 
+    //exchange 와 queue를 바인딩 ( 하나의 채널 )
+    // 특정 Exchange가 특정 queue에 바인딩
+    // 여기서는 processing이라는 exchange가 request,results 큐에 모두다 바인딩 됨.
+    // exchnage는 메시지를 가장 먼저 수신하는, 우체국 같은 곳임 
+    // 그리고 큐는 소포를 받을 개인들. 
+    // 세번째 인자는 라우팅key임.
+    // 라우팅 키를 이용해 exchange에게 어느 큐에게 보내야 할지 알려줄 수 있음.
     await channel.bindQueue('processing.requests', 'processing', 'request')
     await channel.bindQueue('processing.results', 'processing', 'result')
 

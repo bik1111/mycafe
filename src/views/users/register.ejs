@@ -50,7 +50,12 @@
           <div class="card shadow">
             <div class="card-body">
               <h5 class="card-title">Register</h5>
-              <form action="/verify-email" method="POST">
+              <form
+                action="/verify-email"
+                method="POST"
+                class="validated-form"
+                novalidate
+              >
                 <div class="mb-3">
                   <label class="form-label" for="email">Email</label>
                   <input
@@ -58,29 +63,9 @@
                     type="email"
                     id="email"
                     name="email"
-                    required
                   />
-                  <input type="submit" value="인증 하기" />
                 </div>
-              </form>
 
-              <form
-                action="/register"
-                method="POST"
-                class="validated-form"
-                novalidate
-              >
-                <div class="mb-3">
-                  <label class="form-label" for="username">Username</label>
-                  <input
-                    class="form-control"
-                    type="text"
-                    id="username"
-                    name="username"
-                    autofocus
-                    required
-                  />
-                </div>
                 <div class="mb-3">
                   <label class="form-label" for="password">Password</label>
                   <input

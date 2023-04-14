@@ -9,6 +9,7 @@ import amqp from "amqplib";
 
 const messageQueueConnectionString =  'amqp://guest:guest@127.0.0.1:5672/';
 
+//메시지 수신
 async function listenForMessages() {
     // connect To RabbitMQ.
     let connection  = await amqp.connect(messageQueueConnectionString);
@@ -51,6 +52,7 @@ function consume({ connection, channel, resultsChannel}) {
             let processingResults = await processMessage(requestData);
 
             // publish results to channel
+            // 프로세싱 처리한 메시지를 채널로 push.
             await publishToChannel(resultsChannel, {
             exchangeName: "processing",
             routingKey: "result",

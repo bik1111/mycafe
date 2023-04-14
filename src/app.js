@@ -5,7 +5,9 @@ import cafeRouter  from "./router/cafe.js";
 import homeRouter from "./router/home.js";
 import reviewRouter from './router/review.js';
 import morgan from 'morgan';
+import { Client } from '@elastic/elasticsearch';
 import path from 'path';
+import compression from "compression";
 import bodyParser from 'body-parser';
 import ejsMate from "ejs-mate";
 import session from 'express-session';
@@ -16,11 +18,10 @@ import localsMiddleware from './middleware.js';
 import MySQLStore from 'express-mysql-session';
 const MySQLStoreSession = MySQLStore(session);
 
-
 const app = express();
 
 var options ={ 
-  host: '127.0.0.1',
+  host: 'docker.for.mac.host.internal',
   port: 3306,
   user: `${process.env.DB_USER}`,
   password: `${process.env.DB_PASS}`,
@@ -48,6 +49,8 @@ app.use(session ({
 }))
 app.use(flash());
 app.use(localsMiddleware);
+app.use(compression())
+
 
 
 
