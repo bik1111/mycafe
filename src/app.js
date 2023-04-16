@@ -1,3 +1,4 @@
+
 import dotenv from 'dotenv';
 dotenv.config();
 import express from "express";
@@ -5,7 +6,6 @@ import cafeRouter  from "./router/cafe.js";
 import homeRouter from "./router/home.js";
 import reviewRouter from './router/review.js';
 import morgan from 'morgan';
-import { Client } from '@elastic/elasticsearch';
 import path from 'path';
 import compression from "compression";
 import bodyParser from 'body-parser';
@@ -16,12 +16,14 @@ import methodOverride from 'method-override';
 import cookieParser from 'cookie-parser';
 import localsMiddleware from './middleware.js';
 import MySQLStore from 'express-mysql-session';
+
+
 const MySQLStoreSession = MySQLStore(session);
 
 const app = express();
 
 var options ={ 
-  host: 'docker.for.mac.host.internal',
+  host: '127.0.0.1',
   port: 3306,
   user: `${process.env.DB_USER}`,
   password: `${process.env.DB_PASS}`,
@@ -77,14 +79,13 @@ app.use('/', homeRouter);
 
 app.use(logger);
 
+const PORT = 8080;
 
-
-
-const PORT = 3000;
 const handleListening = () =>
   console.log(`✅ Server listenting on http://localhost:${PORT} 🚀`);
 
 app.listen(PORT, handleListening);
+
 
 
 export default app;

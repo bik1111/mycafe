@@ -30,17 +30,17 @@ export const login = async (req, res) => {
 
         console.log(user)
 
-        if (user.length > 0) {
+        //if (user.length > 0) {
 
-            const pwCheck = await bcrypt.compare(password, user[0].password);
+        //   const pwCheck = await bcrypt.compare(password, user[0].password);
 
-            if (pwCheck) {
+            if (user) {
                 //jwt 토큰 발급.
                 const accessToken = jwt.sign(user[0]);
 
 
                 const refreshToken = jwt.refresh();
-                redisClient.set(username, refreshToken);
+                redisClient.set(email, refreshToken);
                 
 
                 //클라이언트에게 쿠키단에 JWT 심어주기.
@@ -57,13 +57,13 @@ export const login = async (req, res) => {
                     msg: 'password is not corret.'
                 })
             }
-        } else {
-            res.status(401).send({
-                ok: false,
-                msg: 'user not exist.'
+        //} else {
+        //    res.status(401).send({
+        //        ok: false,
+        //        msg: 'user not exist.'
 
-            })
-        }
+       //     })
+    //    }
     } catch (err) {
         console.log(err);
         res.status(500).json({ message: 'Internal server error' });
@@ -220,6 +220,9 @@ export const emailLinkauth = async (req, res) => {
 
     // 이메일 중복 확인 필요하고, password 암호화 필요!!
     const { email, password } = req.body;
+
+    // const password = bcrypt....
+
 
     // 데이터베이스에 토큰,이메일, 비빌번호 저장.
     const waitingUser = await saveTokenInUserInfo(token, email, password);
