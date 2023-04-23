@@ -1,39 +1,64 @@
-/*tracing.js*/
-const opentelemetry = require("@opentelemetry/api");
-const { Resource } = require("@opentelemetry/resources");
-const { SemanticResourceAttributes } = require("@opentelemetry/semantic-conventions");
-const { NodeTracerProvider } = require("@opentelemetry/sdk-trace-node");
-const { SimpleSpanProcessor } = require('@opentelemetry/tracing');
-const { registerInstrumentations } = require("@opentelemetry/instrumentation");
-const { ConsoleSpanExporter, BatchSpanProcessor } = require("@opentelemetry/sdk-trace-base");
-const { ZipkinExporter } = require('@opentelemetry/exporter-zipkin');
-// Optionally register instrumentation libraries
-registerInstrumentations({
-  instrumentations: [],
-});
+'use strict'
 
-const resource =
-  Resource.default().merge(
-    new Resource({
-      [SemanticResourceAttributes.SERVICE_NAME]: "service-name-here",
-      [SemanticResourceAttributes.SERVICE_VERSION]: "0.1.0",
-    })
-  );
+const {
+  BasicTracerProvider,
+  ConsoleSpanExporter,
+  SimpleSpanProcessor,
+  BatchSpanProcessor,
+} = require('@opentelemetry/tracing')
+const { CollectorTraceExporter } = require('@opentelemetry/exporter-collector')
+const { Resource } = require('@opentelemetry/resources')
+const { SemanticResourceAttributes } = require('@opentelemetry/semantic-conventions')
+const { ExpressInstrumentation } = require('@opentelemetry/instrumentation-express')
+const { HttpInstrumentation } = require('@opentelemetry/instrumentation-http')
+const { registerInstrumentations } = require('@opentelemetry/instrumentation')
+const opentelemetry = require('@opentelemetry/sdk-node')
+const { getNodeAutoInstrumentations } = require('@opentelemetry/auto-instrumentations-node')
+const { JaegerExporter } = require('@opentelemetry/exporter-jaeger')
+const { NodeTracerProvider } = require('@opentelemetry/sdk-trace-node')
+const { OTTracePropagator } = require('@opentelemetry/propagator-ot-trace')
 
-const provider = new NodeTracerProvider({
-    resource: resource,
-});
-const exporter = new ConsoleSpanExporter();
-const processor = new BatchSpanProcessor(exporter);
-provider.addSpanProcessor(processor);
+const hostName = process.env.OTEL_TRACE_HOST || 'localhost'
 
-provider.register();
+const options = {
+  tags: [],
+  endpoint: `http://localhost:14268/api/traces`,
+}
 
+const init = (serviceName, environment) => {
 
-provider.addSpanProcessor(
-  new SimpleSpanProcessor(
-    new ZipkinExporter({
-      serviceName : "mycafe"
-    })
-  )
-)
+  // User Collector Or Jaeger Exporter
+  //const exporter = new CollectorTraceExporter(options)
+  
+  const exporter = new JaegerExporter(options)
+
+  const provider = new NodeTracerProvider({
+    resource: new Resource({
+      [SemanticResourceAttributes.SERVICE_NAME]: serviceName, // Service name that showuld be listed in jaeger ui
+      [SemanticResourceAttributes.DEPLOYMENT_ENVIRONMENT]: environment,
+    }),
+  })
+
+  //provider.addSpanProcessor(new SimpleSpanProcessor(exporter))
+
+  // Use the BatchSpanProcessor to export spans in batches in order to more efficiently use resources.
+  provider.addSpanProcessor(new BatchSpanProcessor(exporter))
+
+  // Enable to see the spans printed in the console by the ConsoleSpanExporter
+  // provider.addSpanProcessor(new SimpleSpanProcessor(new ConsoleSpanExporter())) 
+
+  provider.register({ propagator: new OTTracePropagator() })
+
+  console.log('tracing initialized')
+
+  registerInstrumentations({
+    instrumentations: [new ExpressInstrumentation(), new HttpInstrumentation()],
+  })
+  
+  const tracer = provider.getTracer(serviceName)
+  return { tracer }
+}
+
+module.exports = {
+  init: init,
+}

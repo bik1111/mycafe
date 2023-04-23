@@ -1,4 +1,3 @@
-
 import dotenv from 'dotenv';
 dotenv.config();
 import express from "express";
@@ -21,6 +20,7 @@ import MySQLStore from 'express-mysql-session';
 const MySQLStoreSession = MySQLStore(session);
 
 const app = express();
+
 
 var options ={ 
   host: '127.0.0.1',
