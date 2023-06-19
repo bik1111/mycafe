@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 export const redisClient =  redis.createClient({
-  host: 'localhost',
+  host: 'redis',
   port: 6379,
 });
 
@@ -21,12 +21,12 @@ redisClient.on('connect', () => {
 export const set = (key, value) => {
     redisClient.set(key, JSON.stringify(value));
   };
-  
+
 
 // 데이터 가져오기.
 export const get = (req, res, next) => {
    let key = req.originalUrl;
-  
+
     redisClient.get(key, (error, data) => {
     if (error) {
         res.status(400).send({
@@ -43,5 +43,3 @@ export const get = (req, res, next) => {
       } else next();
     });
   };
-
-

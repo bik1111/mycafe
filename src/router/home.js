@@ -20,8 +20,8 @@ homeRouter.route('/register').get(registerPage).post(register)
 homeRouter.route('/authemail').post(emailAuth)
 homeRouter.route('/verify-email').post(emailLinkauth)
 homeRouter.route('/verify-email').get(verifyEmailAndToken)
-homeRouter.route('/edit/username').all(authJWT).get(editUserNamePage).post(editUserName)
-homeRouter.route('/edit/password').all(authJWT).get(editPasswordPage).post(editPassword)
+homeRouter.route('/edit/username').get(editUserNamePage).post(editUserName)
+homeRouter.route('/edit/password').get(editPasswordPage).post(editPassword)
 homeRouter.route('/logout').get(logout)
 
 export default homeRouter;

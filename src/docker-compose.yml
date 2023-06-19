@@ -1,32 +1,69 @@
 version: '3.8'
+networks:
+  monitoring:
+    driver: bridge
+volumes:
+    mysql-data:
+    prometheus_data: {}
+    grafana_data: {}
+
 services:
   app:
     build:
       context: .
-      dockerfile : Dockerfile
+      dockerfile: Dockerfile
     ports:
-      - 3000:3000
+      - 3001:3001
     volumes:
       - .:/src
     depends_on:
       - mysql-server
       - redis
-        
+  prometheus:
+    image: prom/prometheus:v2.20.1
+    container_name: prometheus
+    volumes:
+      - prometheus_data:/prometheus
+    ports:
+      - 9090:9090
+    expose:
+      - 9090
+    networks:
+      - monitoring
+  grafana:
+    image: grafana/grafana:7.1.5
+    container_name: grafana
+    volumes:
+      - grafana_data:/var/lib/grafana
+    environment:
+      - GF_AUTH_DISABLE_LOGIN_FORM=true
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+    ports:
+      - 3000:3000
+    expose:
+      - 3000
+    networks:
+      - monitoring
   mysql-server:
     image: mysql:8.0
 
-    restart : always
+    restart: always
 
     environment:
-      - MYSQL_DATABASE=mycafe
-      - MYSQL_ROOT_PASSWORD=kfkdog12
+      - MYSQL_DATABASE=cafe
+      - MYSQL_ROOT_PASSWORD=tkfkdgo12
     ports:
       - '3306:3306'
+    volumes:
+      - mysql-data:/var/lib/mysql
+  
+
   redis:
     image: redis:latest
-    command: ["redis-server", "--bind", "redis", "--port", "6379"]
-    container_name : redis
+    command: [ "redis-server", "--bind", "redis", "--port", "6379" ]
+    container_name: redis
     ports:
       - "6379:6379"
-    restart : always
+    restart: always
 

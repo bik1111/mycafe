@@ -1,6 +1,3 @@
-
-
-
 export const pagination = async(rows, currPage, displayRowCnt, displayPageCnt) => {
 
     const totalPage = Math.ceil(rows.length / displayRowCnt);
