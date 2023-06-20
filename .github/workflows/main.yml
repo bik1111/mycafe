@@ -42,11 +42,9 @@ jobs:
         with:
           registry-type: public
 
-      - name: Create .env file
+      - name: "Create env file"
         run: |
-          touch .env
-          echo API_KEY=${{ secrets.API_KEY }} >> .env
-          cat .env
+          echo "${{ secrets.ENV_FILE }}" > .env
 
       - name: Build, tag, and push image to Amazon ECR
         id: build-image
