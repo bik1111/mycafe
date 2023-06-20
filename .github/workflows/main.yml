@@ -45,8 +45,8 @@ jobs:
       - name: "Create env file"
         run: |
           echo "${{ secrets.ENV_FILE }}" > .env
-          echo "Trick to echo GitHub Actions Secret:  "
-          echo ${{secrets.ENV_FILE}} | sed 's/./& /g'
+          
+          
       - name: Build, tag, and push image to Amazon ECR
         id: build-image
         env:
