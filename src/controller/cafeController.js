@@ -108,7 +108,7 @@ export const getCafe = async(req,res,next) => {
         const getLatLngSql = `SELECT lat, lng, name, address FROM CafeInfo`;
 
         const [result] = await conn.query(getLatLngSql);
-        
+
         set(req.originalUrl, result);
                 
             return res.render('cafes/cafe', { result,
