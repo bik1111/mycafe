@@ -15,7 +15,8 @@ import methodOverride from 'method-override';
 import cookieParser from 'cookie-parser';
 import localsMiddleware from './middleware.js';
 import MySQLStore from 'express-mysql-session';
-
+import { restResponseTimeHistogram, startMetricServer } from './utils/monitor.js';
+import responseTime from 'response-time';
 
 const MySQLStoreSession = MySQLStore(session);
 
@@ -23,7 +24,7 @@ const app = express();
 
 
 var options = {
-  host: '127.0.0.1',
+  host: 'localhost',
   port: 3306,
   user: `${process.env.DB_USER}`,
   password: `${process.env.DB_PASS}`,
@@ -52,8 +53,15 @@ app.use(session({
 app.use(flash());
 app.use(localsMiddleware);
 app.use(compression())
-
-
+app.use(responseTime((req ,res, time) => {
+  if(req?.route?.path) {
+    restResponseTimeHistogram.observe({
+      method: req.method,
+      route : req.route.path,
+      status_code : res.statusCode
+    }, time * 1000)
+  }
+}))
 
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -78,13 +86,16 @@ app.use('/', homeRouter);
 
 app.use(logger);
 
+
+
 const PORT = 3001;
+
 
 const handleListening = () =>
   console.log(`✅ Server listenting on http://localhost:${PORT} 🚀`);
 
 app.listen(PORT, handleListening);
-
+startMetricServer();
 
 
 export default app;

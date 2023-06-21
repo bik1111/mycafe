@@ -1,37 +1,33 @@
-import client, { register } from "prom-client";
-import http from "http";
-import url from "url";
+import client from "prom-client";
+import express from "express";
 
-// Create a Registry which registers the metrics
-const register = new client.Registry()
-// Add a default label which is added to all metrics
-register.setDefaultLabels({
-  app: 'example-nodejs-app'
+const app = express();
+
+
+export const restResponseTimeHistogram = new client.Histogram({
+  name : 'rest_response_time_duration_seconds', 
+  help : 'REST API response time in seconds',
+  labelNames : ['method', 'route', 'status_code']
 })
-// Enable the collection of default metrics
-client.collectDefaultMetrics({ register })
-// Create a histogram metric
-const httpRequestDurationMicroseconds = new client.Histogram({
-  name: 'http_request_duration_seconds',
-  help: 'Duration of HTTP requests in microseconds',
-  labelNames: ['method', 'route', 'code'],
-  buckets: [0.1, 0.3, 0.5, 0.7, 1, 3, 5, 7, 10]
+
+export const databaseResponseTimeHistogram = new client.Histogram({
+  name : 'db_response_time_duration_seconds', 
+  help : 'Database response time in seconds',
+  labelNames : ['operation', 'success']
 })
-// Register the histogram
-register.registerMetric(httpRequestDurationMicroseconds)
-// Define the HTTP server
-const server = http.createServer(async (req, res) => {
-    // Start the timer
-  const end = httpRequestDurationMicroseconds.startTimer()
-// Retrieve route from request object
-  const route = url.parse(req.url).pathname
-if (route === '/metrics') {
-    // Return all metrics the Prometheus exposition format
-    res.setHeader('Content-Type', register.contentType)
-    res.end(register.metrics())
-  }
-// End timer and add labels
-  end({ route, code: res.statusCode, method: req.method })
-})
-// Start the HTTP server which exposes the metrics on http://localhost:8080/metrics
-server.listen(8080)
+
+export const startMetricServer = (req,res) => {
+  const collectDefaultMetrics = client.collectDefaultMetrics;
+
+  collectDefaultMetrics();
+
+  app.get('/metrics', async() => {
+    res.set("Content-Type", client.register.contentType)
+    return res.send(await client.register.metrics())
+  })
+
+  app.listen(9100, () => {
+    console.log('Metrics server started at http://localhost:9100')
+  })
+}
+
