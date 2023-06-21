@@ -44,9 +44,16 @@ jobs:
 
       - name: "Create env file"
         run: |
-          echo "${{ secrets.ENV_FILE }}" > .env
-          echo "Trick to echo GitHub Actions Secret:  "
-          echo ${{secrets.ENV_FILE}} | sed 's/./& /g'
+          echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env
+          echo "DB_USER=${{ secrets.DB_USER }}" >> .env
+          echo "DB_PASS=${{ secrets.DB_PASS}}" >> .env
+          echo "DB_NAME=${{ secrets.DB_NAME }}" >> .env
+          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
+          echo "REDIS_HOST=${{ secrets.REDIS_HOST }}" >> .env
+          echo "REDIS_PORT=${{ secrets.REDIS_PORT }}" >> .env
+          echo "SESSION_SECRET=${{ secrets.SESSION_SECRET }}" >> .env
+          cat .env
+
       - name: Build, tag, and push image to Amazon ECR
         id: build-image
         env:
