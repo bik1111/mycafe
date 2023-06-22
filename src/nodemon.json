@@ -1,5 +1,0 @@
-{
-    "ignore": ["monitor.js"],
-    "exec": "npm run start-monitor & npm run start-app"
-  }
-  

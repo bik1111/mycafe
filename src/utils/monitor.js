@@ -17,6 +17,7 @@ export const databaseResponseTimeHistogram = new client.Histogram({
 })
 
 export const startMetricServer = (req,res) => {
+  try {
   const collectDefaultMetrics = client.collectDefaultMetrics;
 
   collectDefaultMetrics();
@@ -27,7 +28,11 @@ export const startMetricServer = (req,res) => {
   })
 
   app.listen(9100, () => {
-    console.log('Metrics server started at http://localhost:9100')
+    console.log('Metrics server started at http://localhost:3001')
   })
+} catch(err){
+  console.log(err);
+
+}
 }
 
