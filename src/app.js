@@ -24,7 +24,7 @@ const app = express();
 
 
 var options = {
-  host: 'docker.for.mac.host.internal',
+  host: 'docker.host.internal',
   port: 3306,
   user: `${process.env.DB_USER}`,
   password: `${process.env.DB_PASS}`,

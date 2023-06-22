@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 export const redisClient =  redis.createClient({
-  host: 'docker.for.mac.host.internal',
+  host: 'docker.host.internal',
   port: 6379,
 });
 
