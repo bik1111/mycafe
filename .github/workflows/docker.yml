@@ -7,7 +7,7 @@ on:
 
 # 환경설정
 env:
-  DOCKER_IMAGE: ghcr.io/${{ github.actor }}/nuxt-auto-deploy
+  DOCKER_IMAGE: ghcr.io/${{ github.actor }}/njincheol-mycafe
   VERSION: ${{ github.sha }}
   NAME: go_cicd
 
@@ -64,4 +64,4 @@ jobs:
       - name: Docker run
         run: |
           docker stop ${{ env.NAME }} && docker rm ${{ env.NAME }} && docker rmi ${{ env.DOCKER_IMAGE }}:latest
-          docker run -d -p 80:3000 --name go_cicd --restart always ${{ env.DOCKER_IMAGE }}:latest
+          docker run -d -p 80:3001 --name go_cicd --restart always ${{ env.DOCKER_IMAGE }}:latest
