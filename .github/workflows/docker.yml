@@ -16,6 +16,8 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
+    permissions:
+      packages: write
     steps:
       # github repository에서 checkout
       - uses: actions/checkout@v2
