@@ -46,6 +46,7 @@ jobs:
           push: true
           tags: ${{ env.DOCKER_IMAGE }}:latest
           context: ./src
+          platforms: linux/arm64
 
   # 배포 Job
   deploy:
