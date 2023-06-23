@@ -41,7 +41,6 @@ jobs:
         id: docker_build
         uses: docker/build-push-action@v2
         with:
-          path: src # Dockerfile의 위치인 src 폴더를 지정
           builder: ${{ steps.buildx.outputs.name }}
           push: true
           tags: ${{ env.DOCKER_IMAGE }}:latest
@@ -60,6 +59,5 @@ jobs:
       # 3000 -> 80 포트로 수행하도록 지정
       - name: Docker run
         run: |
-          cd ../src
           docker stop ${{ env.NAME }} && docker rm ${{ env.NAME }} && docker rmi ${{ env.DOCKER_IMAGE }}:latest
           docker run -d -p 80:3001 --name go_cicd --restart always ${{ env.DOCKER_IMAGE }}:latest
