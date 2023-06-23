@@ -44,7 +44,7 @@ jobs:
         with:
           builder: ${{ steps.buildx.outputs.name }}
           push: true
-          tags: ${{ env.DOCKER_IMAGE }}:linux-amd64
+          tags: ${{ env.DOCKER_IMAGE }}:linux-arm64
           context: ./src
 
   # 배포 Job
