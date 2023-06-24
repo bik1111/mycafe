@@ -3,8 +3,8 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 export const redisClient =  redis.createClient({
-  host: 'redis-server',
-  port: 6379,
+  legacyMode : true,
+  url : 'redis://redis:6379'
 });
 
 redisClient.on('error', (err) => {
