@@ -53,12 +53,12 @@ app.use(session({
 app.use(flash());
 app.use(localsMiddleware);
 app.use(compression())
-app.use(responseTime((req ,res, time) => {
-  if(req?.route?.path) {
+app.use(responseTime((req, res, time) => {
+  if (req?.route?.path) {
     restResponseTimeHistogram.observe({
       method: req.method,
-      route : req.route.path,
-      status_code : res.statusCode
+      route: req.route.path,
+      status_code: res.statusCode
     }, time * 1000)
   }
 }))
