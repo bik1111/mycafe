@@ -6,7 +6,6 @@ import { findUser, registerUser,
         saveTokenInUserInfo, verifyToken, 
         updateStatus } from "../service/cafeService.js"
 
-import { smtpTransport } from "../config/email.js";
 import crypto from "crypto";
 
 export const home = (req, res) => {
