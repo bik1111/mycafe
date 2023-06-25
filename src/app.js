@@ -23,33 +23,7 @@ const MySQLStoreSession = MySQLStore(session);
 const app = express();
 
 
-var options = {
-  host: '127.0.0.1',
-  port: 3306,
-  user: `${process.env.DB_USER}`,
-  password: `${process.env.DB_PASS}`,
-  database: `${process.env.DB_NAME}`
-};
 
-
-
-var sessionStore = new MySQLStoreSession(options);
-app.use(cookieParser());
-app.use(session({
-  name: 'session',
-  secret: 'thisshouldbeabettersecret!',
-  resave: false,
-  saveUninitialized: false,
-  touchAfter: 24 * 60 * 60,
-  store: sessionStore,
-  cookie: {
-    httpOnly: true,
-    // secure: true,
-    expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
-    maxAge: 1000 * 60 * 60 * 24 * 7
-  }
-
-}))
 app.use(flash());
 app.use(localsMiddleware);
 app.use(compression())
