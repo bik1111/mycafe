@@ -34,12 +34,9 @@
             <a class="nav-link" href="/cafe/search">Search</a>
           </div>
           <div class="navbar-nav ml-auto">
-            <% if(!currentUser) { %>
             <a class="nav-link" href="/login">Login</a>
             <a class="nav-link" href="/register">Register</a>
-            <% } %> <% if(currentUser) { %>
             <a class="nav-link" href="/logout">Logout</a>
-            <% } %>
           </div>
         </div>
       </div>
@@ -60,13 +57,11 @@
           action="/cafe/myFavCafe/<%=userId%>/<%=cafe.id%>?_method=DELETE"
           method="POST"
         >
-          <% if (String(userId) === String(currentUser.id)) { %>
           <button class="btn btn-sm btn-danger">Delete</button>
           <% } %>
         </form>
       </div>
     </div>
-    <% } %>
   </body>
   <script>
     const cafe = <%-JSON.stringify(myFavCafes) %>

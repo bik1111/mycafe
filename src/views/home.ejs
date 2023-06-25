@@ -19,12 +19,9 @@
           <nav class="nav nav-masthead justify-content-center float-md-right">
             <a class="nav-link active" aria-current="page" href="#">Home</a>
             <a class="nav-link" href="/cafe/info/1">Cafes</a>
-            <% if(!currentUser) { %>
             <a class="nav-link" href="/login">Login</a>
             <a class="nav-link" href="/register">Register</a>
-            <% } %> <% if(currentUser) { %>
             <a class="nav-link" href="/logout">Logout</a>
-            <% } %>
           </nav>
         </div>
       </header>

@@ -25,7 +25,7 @@ const app = express();
 
 
 app.use(flash());
-app.use(localsMiddleware);
+//app.use(localsMiddleware);
 app.use(compression())
 app.use(responseTime((req, res, time) => {
   if (req?.route?.path) {
