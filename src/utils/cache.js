@@ -2,14 +2,14 @@ import redis from "ioredis"
 import dotenv from 'dotenv';
 dotenv.config();
 
-export const redisClient =  redis.createClient({
-  legacyMode : true,
-  url : 'redis://redis:6379'
+export const redisClient = redis.createClient({
+  legacyMode: true,
+  url: 'redis://redis:6379'
 });
 
 redisClient.on('error', (err) => {
   console.log(`Redis error: ${err}`);
-    redisClient.quit();
+  redisClient.quit();
 });
 
 
@@ -19,27 +19,27 @@ redisClient.on('connect', () => {
 
 //redis에 데이터 저장.
 export const set = (key, value) => {
-    redisClient.set(key, JSON.stringify(value));
-  };
+  redisClient.set(key, JSON.stringify(value));
+};
 
 
 // 데이터 가져오기.
 export const get = (req, res, next) => {
-   let key = req.originalUrl;
+  let key = req.originalUrl;
 
-    redisClient.get(key, (error, data) => {
+  redisClient.get(key, (error, data) => {
     if (error) {
-        res.status(400).send({
-          ok: false,
-          message: error,
-        });
+      res.status(400).send({
+        ok: false,
+        message: error,
+      });
     }
-      if (data !== null) {
-       console.log('data from redis!');
+    if (data !== null) {
+      console.log('data from redis!');
       res.status(200).send({
-       ok: true,
-       data: JSON.parse(data),
-        });
-      } else next();
-    });
-  };
+        ok: true,
+        data: JSON.parse(data),
+      });
+    } else next();
+  });
+};
