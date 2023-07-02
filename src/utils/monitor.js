@@ -22,13 +22,13 @@ export const startMetricServer = (req,res) => {
 
   collectDefaultMetrics();
 
-  app.get('/metrics', async() => {
+  app.get('/metrics', async(req,res) => {
     res.set("Content-Type", client.register.contentType)
     return res.send(await client.register.metrics())
   })
 
   app.listen(9100, () => {
-    console.log('Metrics server started at http://localhost:3001')
+    console.log('Metrics server started at http://localhost:9100')
   })
 } catch(err){
   console.log(err);

@@ -82,6 +82,8 @@ import { redisClient, set, get } from "../utils/cache.js";
     // @returns {시작페이지, 마지막페이지, 전체페이지, 현재 페이지, 보여질 게시물}
 
 
+
+
 export const getCafe = async(req,res,next) => {
 
     try {

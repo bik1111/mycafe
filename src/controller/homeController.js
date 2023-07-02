@@ -7,6 +7,14 @@ import { findUser, registerUser,
         updateStatus } from "../service/cafeService.js"
 
 import crypto from "crypto";
+import { smtpTransport } from '../config/email.js'
+
+export const sendOk = async(req,res) => {
+    res.status(200).json({message: "OK"})
+
+}
+
+
 
 export const home = (req, res) => {
     res.render('home')

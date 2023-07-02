@@ -5,15 +5,13 @@ import { home, login, loginPage, register,
     registerPage, logout, 
     editUserNamePage, editUserName,
     editPasswordPage,  editPassword, 
-    emailAuth, emailLinkauth, verifyEmailAndToken } from '../controller/homeController.js'
-
-import { authJWT } from '../utils/auth.js';
+    emailAuth, emailLinkauth, verifyEmailAndToken, sendOk } from '../controller/homeController.js'
 
 const homeRouter = express.Router();
 
 homeRouter.use(bodyParser.urlencoded({ extended: true }));
 
-
+homeRouter.route('/').get(sendOk)
 homeRouter.route('/home').get(home)
 homeRouter.route('/login').get(loginPage).post(login)
 homeRouter.route('/register').get(registerPage).post(register)

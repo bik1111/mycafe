@@ -2,6 +2,7 @@
 import jwt from "jsonwebtoken";
 
 import { findCafeInfobyId, createNewReview, findUserReview , deleteCafeReview} from '../service/reviewService.js';
+import { databaseResponseTimeHistogram } from "../utils/monitor.js";
 
 export const getReivewPage = async (req,res) => {
     const jwtToken = req.headers.cookie
@@ -24,6 +25,13 @@ export const getReivewPage = async (req,res) => {
 
 
 export const postReview = async(req,res) => {
+
+const timer = databaseResponseTimeHistogram.startTimer()
+    
+const metricsLabels = {
+    operation: 'createReview'
+}
+
 try {
     const { reviewBody, reviewRating } = req.body;
 
@@ -36,13 +44,18 @@ try {
     const userId = decoded.id;
 
     const cafeId = req.params.cafeId;
-    const newReview = createNewReview(cafeId,userId,reviewRating,reviewBody);
-    
-    req.flash('success', 'Created new review!');
+
+
+    const newReview = await createNewReview(cafeId,userId,reviewRating,reviewBody);
+
+    timer({...metricsLabels, success: true});
+
+
     res.redirect(`/review/${cafeId}`);
 
 
 } catch (err)  {
+    timer({...metricsLabels, success: false});
     console.log(err);
 }
 }
